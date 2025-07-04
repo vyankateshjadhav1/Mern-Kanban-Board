@@ -6,6 +6,7 @@ export default function Register() {
   const [form, setForm] = useState({ name: "", email: "", password: "" });
   const navigate = useNavigate();
 
+  
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {

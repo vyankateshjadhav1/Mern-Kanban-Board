@@ -17,7 +17,7 @@ const taskSchema = new mongoose.Schema({
   dueDate: {
     type: Date,
     required: false,
-  } // ✅ This comma was missing
-});
+  }
+}, { timestamps: true }); // ✅ Enable createdAt & updatedAt
 
 module.exports = mongoose.model('Task', taskSchema);

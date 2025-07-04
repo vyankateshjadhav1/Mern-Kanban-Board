@@ -2,27 +2,27 @@ function setSocketServer(io) {
   io.on("connection", (socket) => {
     console.log("🟢 Client connected:", socket.id);
 
-    // ✅ TASK CREATED
+    //  TASK CREATED
     socket.on("task-created", (task) => {
-      console.log("📢 Broadcasting: task-created");
+      console.log(" Broadcasting: task-created");
       io.emit("task-created", task); // send to ALL clients
     });
 
-    // ✅ TASK UPDATED
+    //  TASK UPDATED
     socket.on("task-updated", (task) => {
-      console.log("📢 Broadcasting: task-updated");
+      console.log(" Broadcasting: task-updated");
       io.emit("task-updated", task); // send to ALL clients
     });
 
-    // ✅ TASK DELETED
+    //  TASK DELETED
     socket.on("task-deleted", (taskId) => {
-      console.log("📢 Broadcasting: task-deleted");
+      console.log(" Broadcasting: task-deleted");
       io.emit("task-deleted", taskId); // send to ALL clients
     });
 
-    // 🧹 DISCONNECT
+    //  DISCONNECT
     socket.on("disconnect", () => {
-      console.log("❌ Client disconnected:", socket.id);
+      console.log(" Client disconnected:", socket.id);
     });
   });
 }

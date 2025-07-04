@@ -18,10 +18,10 @@ export default function Dashboard() {
   const fetchTasks = async () => {
     try {
       const res = await API.get("/tasks");
-      console.log("📥 Tasks fetched:", res.data);
+      console.log(" Tasks fetched:", res.data);
       setTasks([...res.data]);
     } catch (err) {
-      console.error("❌ Failed to fetch tasks", err);
+      console.error(" Failed to fetch tasks", err);
     }
   };
 
@@ -47,17 +47,17 @@ export default function Dashboard() {
     fetchTasks();
 
     socket.on("task-created", (data) => {
-      console.log("🔥 task-created received", data);
+      console.log(" task-created received", data);
       fetchTasks();
     });
 
     socket.on("task-updated", (data) => {
-      console.log("🔥 task-updated received", data);
+      console.log(" task-updated received", data);
       fetchTasks();
     });
 
     socket.on("task-deleted", (data) => {
-      console.log("🔥 task-deleted received", data);
+      console.log(" task-deleted received", data);
       fetchTasks();
     });
 

@@ -18,6 +18,6 @@ const taskSchema = new mongoose.Schema({
     type: Date,
     required: false,
   }
-}, { timestamps: true }); // ✅ Enable createdAt & updatedAt
+}, { timestamps: true }); 
 
 module.exports = mongoose.model('Task', taskSchema);

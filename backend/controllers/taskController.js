@@ -10,7 +10,7 @@ exports.getAllTasks = async (req, res) => {
 exports.createTask = async (req, res) => {
   const { title, description, priority, dueDate } = req.body;
 
-  // 🛡 Validation
+  //  Validation
   const forbidden = ["Todo", "In Progress", "Done"];
   if (forbidden.includes(title.trim())) {
     return res.status(400).json({ msg: "❌ Title cannot be a column name." });
@@ -45,10 +45,10 @@ exports.updateTask = async (req, res) => {
     const current = await Task.findById(req.params.id);
     if (!current) return res.status(404).json({ error: "Task not found" });
 
-    // ⏱️ Conflict detection
+    // ⏱ Conflict detection
     if (updatedAt && new Date(updatedAt).getTime() !== new Date(current.updatedAt).getTime()) {
       return res.status(409).json({
-        msg: "⚠️ Task was updated by someone else.",
+        msg: " Task was updated by someone else.",
         current: current,  // send current server version
       });
     }

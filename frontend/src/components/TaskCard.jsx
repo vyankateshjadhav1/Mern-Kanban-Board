@@ -22,7 +22,7 @@ export default function TaskCard({ task, onTaskUpdate, onTaskDelete }) {
   const [conflictData, setConflictData] = useState(null);
   const [showConflictModal, setShowConflictModal] = useState(false);
 
-  // 🔁 Smart Assign
+  //  Smart Assign
   const handleSmartAssign = async (e) => {
     e.preventDefault();
     e.stopPropagation();
@@ -35,7 +35,7 @@ export default function TaskCard({ task, onTaskUpdate, onTaskDelete }) {
     }
   };
 
-  // 🔁 Task Update with Conflict Detection
+  //  Task Update with Conflict Detection
   const handleUpdate = async (e) => {
     e.preventDefault();
     e.stopPropagation();
@@ -43,7 +43,7 @@ export default function TaskCard({ task, onTaskUpdate, onTaskDelete }) {
     try {
       const res = await API.put(`/tasks/${task._id}`, {
         ...editedTask,
-        updatedAt: task.updatedAt, // 🔍 send for conflict check
+        updatedAt: task.updatedAt, //  send for conflict check
       });
       socket.emit("task-updated", res.data);
       setEditing(false);
@@ -58,7 +58,7 @@ export default function TaskCard({ task, onTaskUpdate, onTaskDelete }) {
     }
   };
 
-  // ❌ Delete
+  //  Delete
   const handleDelete = async (e) => {
     e.preventDefault();
     e.stopPropagation();
@@ -71,12 +71,12 @@ export default function TaskCard({ task, onTaskUpdate, onTaskDelete }) {
     }
   };
 
-  // ⬅️ Drag Start
+  //  Drag Start
   const handleDragStart = (e) => {
     e.dataTransfer.setData("taskId", task._id);
   };
 
-  // 🧾 Edit Mode
+  //  Edit Mode
   if (editing) {
     return (
       <div
@@ -143,19 +143,19 @@ export default function TaskCard({ task, onTaskUpdate, onTaskDelete }) {
           </button>
         </div>
 
-        {/* ⚠️ Conflict Modal */}
+        {/*  Conflict Modal */}
         {showConflictModal && (
           <div className="conflict-modal">
-            <h4>⚠️ Conflict Detected</h4>
+            <h4> Conflict Detected</h4>
             <p>This task was updated by someone else.</p>
 
             <div className="modal-section">
-              <h5>🧍 Your Changes</h5>
+              <h5> Your Changes</h5>
               <pre>{JSON.stringify(editedTask, null, 2)}</pre>
             </div>
 
             <div className="modal-section">
-              <h5>🌐 Server Version</h5>
+              <h5> Server Version</h5>
               <pre>{JSON.stringify(conflictData, null, 2)}</pre>
             </div>
 
@@ -172,7 +172,7 @@ export default function TaskCard({ task, onTaskUpdate, onTaskDelete }) {
               <button
                 onClick={(e) => {
                   setShowConflictModal(false);
-                  handleUpdate(e); // retry
+                  handleUpdate(e); 
                 }}
               >
                 Use My Changes
@@ -187,7 +187,7 @@ export default function TaskCard({ task, onTaskUpdate, onTaskDelete }) {
     );
   }
 
-  // 🟩 Default Task Card
+  
   return (
     <div
       className={`task-card task-card-${task.priority.toLowerCase()}`}

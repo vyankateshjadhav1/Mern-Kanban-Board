@@ -39,8 +39,9 @@ export default function Dashboard() {
         dueDate: ""
       });
     } catch (err) {
-      alert("Task creation failed");
-    }
+  console.error("❌ Task creation error:", err.response?.data || err.message);
+  alert("Task creation failed");
+}
   };
 
   useEffect(() => {

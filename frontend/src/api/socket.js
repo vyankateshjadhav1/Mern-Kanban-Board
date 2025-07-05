@@ -1,6 +1,6 @@
 import { io } from "socket.io-client";
 
-const socket = io("http://localhost:5000", { transports: ["websocket"] });
+const socket = io("https://taskflow-yjut.onrender.com", { transports: ["websocket"] });
 
 socket.on("connect", () => {
   console.log("🟢 Socket connected:", socket.id);

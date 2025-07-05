@@ -17,7 +17,7 @@ export default function Dashboard() {
 
   const fetchTasks = async () => {
     try {
-      const res = await API.get("/tasks");
+      const res = await API.get("/api/tasks");
       console.log(" Tasks fetched:", res.data);
       setTasks([...res.data]);
     } catch (err) {

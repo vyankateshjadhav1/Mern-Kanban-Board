@@ -29,7 +29,7 @@ export default function Dashboard() {
     e.preventDefault();
     if (!newTask.title) return alert("Title is required");
     try {
-      const res = await API.post("/tasks", newTask);
+      const res = await API.post("/api/tasks", newTask);
       socket.emit("task-created", res.data);
       setNewTask({
         title: "",

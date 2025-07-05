@@ -22,7 +22,7 @@ export default function Column({ status, tasks, onTaskUpdate }) {
     if (!taskId) return;
 
     try {
-      const res = await API.put(`/tasks/${taskId}`, { status });
+      const res = await API.put(`/api/tasks/${taskId}`, { status });
       socket.emit("task-updated", res.data);
       handleTaskUpdate();
     } catch (err) {

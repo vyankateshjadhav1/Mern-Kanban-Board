@@ -27,7 +27,7 @@ export default function TaskCard({ task, onTaskUpdate, onTaskDelete }) {
     e.preventDefault();
     e.stopPropagation();
     try {
-      const res = await API.post(`/tasks/${task._id}/smart-assign`);
+      const res = await API.post(`/api/tasks/${task._id}/smart-assign`);
       socket.emit("task-updated", res.data);
       onTaskUpdate?.();
     } catch (err) {

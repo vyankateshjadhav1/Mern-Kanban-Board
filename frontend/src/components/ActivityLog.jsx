@@ -7,7 +7,7 @@ export default function ActivityLog() {
 
   const fetchLogs = async () => {
     try {
-      const res = await API.get("/logs/recent");
+      const res = await API.get("/api/logs/recent");
       setLogs(res.data);
     } catch (err) {
       console.error("Failed to fetch activity logs", err);

@@ -2,6 +2,7 @@ const jwt = require("jsonwebtoken");
 
 const authMiddleware = (req, res, next) => {
   const token = req.header("Authorization")?.split(" ")[1];
+  console.log("💥 Token Received:", token);
 
   if (!token) return res.status(401).json({ msg: "Auth denied" });
 

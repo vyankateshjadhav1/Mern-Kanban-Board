@@ -18,7 +18,7 @@ const app = express();
 const server = http.createServer(app);
 
 // Frontend URL
-const FRONTEND_ORIGIN = "https://mern-kanban-board-sable.vercel.app";
+const FRONTEND_ORIGIN = "https://mern-kanban-board-54839fd12.vercel.app/";
 
 // MongoDB Connect
 connectDB()

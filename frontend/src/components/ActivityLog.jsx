@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import API from "../api/axios";
+import API from "../api/axios"; // ✅ baseURL includes /api
 import { FiActivity, FiClock } from "react-icons/fi";
 
 export default function ActivityLog() {
@@ -7,7 +7,7 @@ export default function ActivityLog() {
 
   const fetchLogs = async () => {
     try {
-      const res = await API.get("/logs/recent");
+      const res = await API.get("/logs/recent"); // ✅ This becomes /api/logs/recent
       setLogs(res.data);
     } catch (err) {
       console.error("Failed to fetch activity logs", err);

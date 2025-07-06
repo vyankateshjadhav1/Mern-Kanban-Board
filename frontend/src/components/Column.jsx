@@ -11,22 +11,23 @@ export default function Column({ status, tasks, onTaskUpdate }) {
     onTaskUpdate?.();
   };
 
-  const handleTaskDelete = (taskId) => {
+  const handleTaskDelete = () => {
     onTaskUpdate?.();
   };
 
   const onDrop = async (e) => {
     e.preventDefault();
     setIsDraggingOver(false);
+
     const taskId = e.dataTransfer.getData("taskId");
     if (!taskId) return;
 
     try {
-      const res = await API.put(`/tasks/${taskId}`, { status });
+      const res = await API.put(`/tasks/${taskId}`, { status }); // ✅ Automatically hits /api/tasks/:id
       socket.emit("task-updated", res.data);
       handleTaskUpdate();
     } catch (err) {
-      console.error("Drag-drop update failed", err);
+      console.error("⚠️ Drag-drop update failed:", err);
     }
   };
 
@@ -53,6 +54,7 @@ export default function Column({ status, tasks, onTaskUpdate }) {
         </h3>
         <span className="column-count">{tasks.length} tasks</span>
       </div>
+
       <div className="task-list">
         {tasks.map((task) => (
           <TaskCard

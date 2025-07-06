@@ -1,14 +1,18 @@
 import axios from "axios";
 
 const API = axios.create({
-  baseURL: "https://taskflow-yjut.onrender.com/api",
+  baseURL: "https://taskflow-yjut.onrender.com/api", // or localhost
+  headers: {
+    "Content-Type": "application/json",
+  },
 });
 
-API.interceptors.request.use((req) => {
+API.interceptors.request.use((config) => {
   const token = localStorage.getItem("token");
-  console.log("👉 Attaching token:", token);  // <- Add this
-  if (token) req.headers.Authorization = `Bearer ${token}`;
-  return req;
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+  return config;
 });
 
 export default API;

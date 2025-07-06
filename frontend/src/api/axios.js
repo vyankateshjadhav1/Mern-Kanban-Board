@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const API = axios.create({
-  baseURL: "https://taskflow-yjut.onrender.com/api", // or localhost
+  baseURL: "https://taskflow-m6go.onrender.com/api", // or localhost
   headers: {
     "Content-Type": "application/json",
   },

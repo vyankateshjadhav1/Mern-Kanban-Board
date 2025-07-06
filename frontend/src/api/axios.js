@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const API = axios.create({
-  baseURL: "https://taskflow-yjut.onrender.com",
+  baseURL: "https://taskflow-yjut.onrender.com/api",
 });
 
 API.interceptors.request.use((req) => {

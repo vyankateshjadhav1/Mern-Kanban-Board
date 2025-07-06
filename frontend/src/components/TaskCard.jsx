@@ -27,7 +27,7 @@ export default function TaskCard({ task, onTaskUpdate, onTaskDelete }) {
     e.preventDefault();
     e.stopPropagation();
     try {
-      const res = await API.post(`/api/tasks/${task._id}/smart-assign`);
+      const res = await API.post(`/tasks/${task._id}/smart-assign`);
       socket.emit("task-updated", res.data);
       onTaskUpdate?.();
     } catch (err) {
@@ -41,7 +41,7 @@ export default function TaskCard({ task, onTaskUpdate, onTaskDelete }) {
     e.stopPropagation();
 
     try {
-      const res = await API.put(`/api/tasks/${task._id}`, {
+      const res = await API.put(`/tasks/${task._id}`, {
         ...editedTask,
         updatedAt: task.updatedAt, //  send for conflict check
       });
@@ -63,7 +63,7 @@ export default function TaskCard({ task, onTaskUpdate, onTaskDelete }) {
     e.preventDefault();
     e.stopPropagation();
     try {
-      await API.delete(`/api/tasks/${task._id}`);
+      await API.delete(`/tasks/${task._id}`);
       socket.emit("task-deleted", task._id);
       onTaskDelete?.(task._id);
     } catch (err) {

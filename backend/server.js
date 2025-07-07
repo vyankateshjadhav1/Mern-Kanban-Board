@@ -15,7 +15,7 @@ dotenv.config();
 const app = express();
 const server = http.createServer(app);
 
-const FRONTEND_ORIGIN = "https://mern-kanban-board-54839fd12.vercel.app";
+const FRONTEND_ORIGIN = "https://mern-kanban-board-sable.vercel.app";
 
 connectDB().then(() => console.log("✅ MongoDB connected"));
 

@@ -7,7 +7,7 @@ import {
   FiUserPlus,
   FiCalendar,
   FiSave,
-  FiX
+  FiX,
 } from "react-icons/fi";
 
 export default function TaskCard({ task, onTaskUpdate, onTaskDelete }) {
@@ -16,13 +16,12 @@ export default function TaskCard({ task, onTaskUpdate, onTaskDelete }) {
     title: task.title,
     description: task.description,
     priority: task.priority,
-    dueDate: task.dueDate ? task.dueDate.slice(0, 10) : ""
+    dueDate: task.dueDate ? task.dueDate.slice(0, 10) : "",
   });
 
   const [conflictData, setConflictData] = useState(null);
   const [showConflictModal, setShowConflictModal] = useState(false);
 
-  //  Smart Assign
   const handleSmartAssign = async (e) => {
     e.preventDefault();
     e.stopPropagation();
@@ -35,7 +34,6 @@ export default function TaskCard({ task, onTaskUpdate, onTaskDelete }) {
     }
   };
 
-  //  Task Update with Conflict Detection
   const handleUpdate = async (e) => {
     e.preventDefault();
     e.stopPropagation();
@@ -43,10 +41,12 @@ export default function TaskCard({ task, onTaskUpdate, onTaskDelete }) {
     try {
       const res = await API.put(`/tasks/${task._id}`, {
         ...editedTask,
-        updatedAt: task.updatedAt, //  send for conflict check
+        updatedAt: task.updatedAt,
       });
       socket.emit("task-updated", res.data);
       setEditing(false);
+      setConflictData(null);
+      setShowConflictModal(false);
       onTaskUpdate?.();
     } catch (err) {
       if (err.response?.status === 409) {
@@ -58,7 +58,6 @@ export default function TaskCard({ task, onTaskUpdate, onTaskDelete }) {
     }
   };
 
-  //  Delete
   const handleDelete = async (e) => {
     e.preventDefault();
     e.stopPropagation();
@@ -71,33 +70,36 @@ export default function TaskCard({ task, onTaskUpdate, onTaskDelete }) {
     }
   };
 
-  //  Drag Start
   const handleDragStart = (e) => {
-    e.dataTransfer.setData("taskId", task._id);
+    if (!editing) e.dataTransfer.setData("taskId", task._id);
   };
 
-  //  Edit Mode
+  const cancelEdit = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setEditing(false);
+    setEditedTask({
+      title: task.title,
+      description: task.description,
+      priority: task.priority,
+      dueDate: task.dueDate ? task.dueDate.slice(0, 10) : "",
+    });
+  };
+
   if (editing) {
     return (
-      <div
-        className={`task-card edit-mode task-card-${editedTask.priority.toLowerCase()}`}
-        onClick={(e) => e.stopPropagation()}
-      >
+      <div className={`task-card edit-mode task-card-${editedTask.priority.toLowerCase()}`} onClick={(e) => e.stopPropagation()}>
         <div className="input-group">
           <input
             value={editedTask.title}
-            onChange={(e) =>
-              setEditedTask({ ...editedTask, title: e.target.value })
-            }
+            onChange={(e) => setEditedTask({ ...editedTask, title: e.target.value })}
             placeholder="Task title"
           />
         </div>
         <div className="input-group">
           <textarea
             value={editedTask.description}
-            onChange={(e) =>
-              setEditedTask({ ...editedTask, description: e.target.value })
-            }
+            onChange={(e) => setEditedTask({ ...editedTask, description: e.target.value })}
             placeholder="Description"
             rows="3"
           />
@@ -105,9 +107,7 @@ export default function TaskCard({ task, onTaskUpdate, onTaskDelete }) {
         <div className="input-group">
           <select
             value={editedTask.priority}
-            onChange={(e) =>
-              setEditedTask({ ...editedTask, priority: e.target.value })
-            }
+            onChange={(e) => setEditedTask({ ...editedTask, priority: e.target.value })}
           >
             <option value="Low">Low</option>
             <option value="Medium">Medium</option>
@@ -122,59 +122,45 @@ export default function TaskCard({ task, onTaskUpdate, onTaskDelete }) {
           <input
             type="date"
             value={editedTask.dueDate}
-            onChange={(e) =>
-              setEditedTask({ ...editedTask, dueDate: e.target.value })
-            }
+            onChange={(e) => setEditedTask({ ...editedTask, dueDate: e.target.value })}
           />
         </div>
         <div className="task-actions">
           <button className="task-btn task-btn-save" onClick={handleUpdate}>
             <FiSave /> Save
           </button>
-          <button
-            className="task-btn task-btn-cancel"
-            onClick={(e) => {
-              e.preventDefault();
-              e.stopPropagation();
-              setEditing(false);
-            }}
-          >
+          <button className="task-btn task-btn-cancel" onClick={cancelEdit}>
             <FiX /> Cancel
           </button>
         </div>
 
-        {/*  Conflict Modal */}
+        {/* Conflict Modal */}
         {showConflictModal && (
           <div className="conflict-modal">
-            <h4> Conflict Detected</h4>
+            <h4>Conflict Detected</h4>
             <p>This task was updated by someone else.</p>
 
             <div className="modal-section">
-              <h5> Your Changes</h5>
+              <h5>Your Changes</h5>
               <pre>{JSON.stringify(editedTask, null, 2)}</pre>
             </div>
 
             <div className="modal-section">
-              <h5> Server Version</h5>
+              <h5>Server Version</h5>
               <pre>{JSON.stringify(conflictData, null, 2)}</pre>
             </div>
 
             <div className="modal-actions">
-              <button
-                onClick={() => {
-                  setEditedTask(conflictData);
-                  setShowConflictModal(false);
-                  setEditing(true);
-                }}
-              >
+              <button onClick={() => {
+                setEditedTask(conflictData);
+                setShowConflictModal(false);
+              }}>
                 Use Server Version
               </button>
-              <button
-                onClick={(e) => {
-                  setShowConflictModal(false);
-                  handleUpdate(e); 
-                }}
-              >
+              <button onClick={(e) => {
+                setShowConflictModal(false);
+                handleUpdate(e);
+              }}>
                 Use My Changes
               </button>
               <button onClick={() => setShowConflictModal(false)}>
@@ -187,25 +173,20 @@ export default function TaskCard({ task, onTaskUpdate, onTaskDelete }) {
     );
   }
 
-  
   return (
     <div
       className={`task-card task-card-${task.priority.toLowerCase()}`}
-      draggable
+      draggable={!editing}
       onDragStart={handleDragStart}
     >
       <div className="task-card-header">
         <h4 className="task-title">{task.title}</h4>
-        <span
-          className={`task-priority priority-${task.priority.toLowerCase()}`}
-        >
+        <span className={`task-priority priority-${task.priority.toLowerCase()}`}>
           {task.priority}
         </span>
       </div>
 
-      {task.description && (
-        <p className="task-description">{task.description}</p>
-      )}
+      {task.description && <p className="task-description">{task.description}</p>}
 
       <div className="task-footer">
         <div>
@@ -213,11 +194,7 @@ export default function TaskCard({ task, onTaskUpdate, onTaskDelete }) {
             <span className="task-assignee">👤 {task.assignedTo.name}</span>
           )}
           {task.dueDate && (
-            <p
-              className={
-                new Date(task.dueDate) < new Date() ? "overdue" : ""
-              }
-            >
+            <p className={new Date(task.dueDate) < new Date() ? "overdue" : ""}>
               <FiCalendar className="task-icon" />
               Due: {new Date(task.dueDate).toLocaleDateString()}
             </p>
@@ -225,29 +202,17 @@ export default function TaskCard({ task, onTaskUpdate, onTaskDelete }) {
         </div>
 
         <div className="task-actions">
-          <button
-            className="task-btn task-btn-smart"
-            onClick={handleSmartAssign}
-            title="Smart Assign"
-          >
+          <button className="task-btn task-btn-smart" onClick={handleSmartAssign} title="Smart Assign">
             <FiUserPlus />
           </button>
-          <button
-            className="task-btn task-btn-edit"
-            onClick={(e) => {
-              e.preventDefault();
-              e.stopPropagation();
-              setEditing(true);
-            }}
-            title="Edit Task"
-          >
+          <button className="task-btn task-btn-edit" onClick={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            setEditing(true);
+          }} title="Edit Task">
             <FiEdit2 />
           </button>
-          <button
-            className="task-btn task-btn-delete"
-            onClick={handleDelete}
-            title="Delete Task"
-          >
+          <button className="task-btn task-btn-delete" onClick={handleDelete} title="Delete Task">
             <FiTrash2 />
           </button>
         </div>

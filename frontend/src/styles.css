@@ -763,3 +763,11 @@ button {
 }
 
 
+/* Fix pointer events during edit mode */
+.task-card.edit-mode {
+  cursor: default;
+}
+
+.task-card.edit-mode * {
+  pointer-events: auto !important;
+}

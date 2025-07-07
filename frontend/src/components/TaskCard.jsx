@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import API from "../api/axios";
 import socket from "../api/socket";
 import { FiEdit2, FiTrash2, FiUserPlus, FiCalendar, FiSave, FiX } from "react-icons/fi";
@@ -6,14 +6,24 @@ import { FiEdit2, FiTrash2, FiUserPlus, FiCalendar, FiSave, FiX } from "react-ic
 export default function TaskCard({ task, onTaskUpdate, onTaskDelete }) {
   const [editing, setEditing] = useState(false);
   const [editedTask, setEditedTask] = useState({
-    title: task.title,
-    description: task.description || "", // Ensure description exists
-    priority: task.priority,
-    dueDate: task.dueDate ? task.dueDate.slice(0, 10) : "",
+    title: "",
+    description: "",
+    priority: "Medium",
+    dueDate: ""
   });
 
   const [conflictData, setConflictData] = useState(null);
   const [showConflictModal, setShowConflictModal] = useState(false);
+
+  // Initialize form data when task changes
+  useEffect(() => {
+    setEditedTask({
+      title: task.title,
+      description: task.description || "",
+      priority: task.priority || "Medium",
+      dueDate: task.dueDate ? task.dueDate.slice(0, 10) : ""
+    });
+  }, [task]);
 
   const handleSmartAssign = async (e) => {
     e.preventDefault();
@@ -74,11 +84,12 @@ export default function TaskCard({ task, onTaskUpdate, onTaskDelete }) {
     e.preventDefault();
     e.stopPropagation();
     setEditing(false);
+    // Reset to original task values
     setEditedTask({
       title: task.title,
       description: task.description || "",
-      priority: task.priority,
-      dueDate: task.dueDate ? task.dueDate.slice(0, 10) : "",
+      priority: task.priority || "Medium",
+      dueDate: task.dueDate ? task.dueDate.slice(0, 10) : ""
     });
   };
 
@@ -88,64 +99,75 @@ export default function TaskCard({ task, onTaskUpdate, onTaskDelete }) {
         className={`task-card edit-mode task-card-${editedTask.priority.toLowerCase()}`}
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="input-group">
-          <label>Task Title</label>
-          <input
-            value={editedTask.title}
-            onChange={(e) => setEditedTask({ ...editedTask, title: e.target.value })}
-            placeholder="Enter task title"
-            autoFocus
-          />
-        </div>
+        <form onSubmit={handleUpdate}>
+          <div className="input-group">
+            <label htmlFor="task-title">Task Title</label>
+            <input
+              id="task-title"
+              type="text"
+              value={editedTask.title}
+              onChange={(e) => setEditedTask({...editedTask, title: e.target.value})}
+              placeholder="Enter task title"
+              required
+              autoFocus
+            />
+          </div>
 
-        <div className="input-group">
-          <label>Description</label>
-          <textarea
-            value={editedTask.description}
-            onChange={(e) => setEditedTask({ ...editedTask, description: e.target.value })}
-            placeholder="Enter task description"
-            rows="3"
-          />
-        </div>
+          <div className="input-group">
+            <label htmlFor="task-description">Description</label>
+            <textarea
+              id="task-description"
+              value={editedTask.description}
+              onChange={(e) => setEditedTask({...editedTask, description: e.target.value})}
+              placeholder="Enter task description"
+              rows="3"
+            />
+          </div>
 
-        <div className="input-group">
-          <label>Priority</label>
-          <select
-            value={editedTask.priority}
-            onChange={(e) => setEditedTask({ ...editedTask, priority: e.target.value })}
-          >
-            <option value="Low">Low</option>
-            <option value="Medium">Medium</option>
-            <option value="High">High</option>
-          </select>
-        </div>
+          <div className="input-group">
+            <label htmlFor="task-priority">Priority</label>
+            <select
+              id="task-priority"
+              value={editedTask.priority}
+              onChange={(e) => setEditedTask({...editedTask, priority: e.target.value})}
+              required
+            >
+              <option value="Low">Low</option>
+              <option value="Medium">Medium</option>
+              <option value="High">High</option>
+            </select>
+          </div>
 
-        <div className="input-group">
-          <label>
-            <FiCalendar style={{ marginRight: "8px" }} />
-            Due Date
-          </label>
-          <input
-            type="date"
-            value={editedTask.dueDate}
-            onChange={(e) => setEditedTask({ ...editedTask, dueDate: e.target.value })}
-          />
-        </div>
+          <div className="input-group">
+            <label htmlFor="task-due-date">
+              <FiCalendar style={{ marginRight: "8px" }} />
+              Due Date
+            </label>
+            <input
+              id="task-due-date"
+              type="date"
+              value={editedTask.dueDate}
+              onChange={(e) => setEditedTask({...editedTask, dueDate: e.target.value})}
+              min={new Date().toISOString().split('T')[0]}
+            />
+          </div>
 
-        <div className="task-actions">
-          <button 
-            className="task-btn task-btn-save" 
-            onClick={handleUpdate}
-          >
-            <FiSave /> Save
-          </button>
-          <button 
-            className="task-btn task-btn-cancel" 
-            onClick={cancelEdit}
-          >
-            <FiX /> Cancel
-          </button>
-        </div>
+          <div className="task-actions">
+            <button 
+              type="submit"
+              className="task-btn task-btn-save"
+            >
+              <FiSave /> Save
+            </button>
+            <button 
+              type="button"
+              className="task-btn task-btn-cancel"
+              onClick={cancelEdit}
+            >
+              <FiX /> Cancel
+            </button>
+          </div>
+        </form>
 
         {showConflictModal && (
           <div className="conflict-modal">

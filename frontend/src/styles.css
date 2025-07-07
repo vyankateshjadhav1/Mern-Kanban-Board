@@ -762,3 +762,50 @@ button {
 .form a:hover {
   color: white;
 }
+
+/* Edit Mode Styles */
+.task-card.edit-mode {
+  cursor: default;
+  pointer-events: auto;
+}
+
+.edit-mode .input-group {
+  margin-bottom: 1rem;
+}
+
+.edit-mode input,
+.edit-mode select,
+.edit-mode textarea {
+  width: 100%;
+  padding: 0.75rem;
+  background: var(--bg-dark);
+  border: 1px solid var(--border-dark);
+  color: var(--text-primary);
+  border-radius: 8px;
+  font-size: 0.9375rem;
+}
+
+.edit-mode textarea {
+  min-height: 100px;
+  resize: vertical;
+}
+
+.edit-mode .task-actions {
+  justify-content: flex-end;
+  margin-top: 1rem;
+}
+
+/* Ensure form elements are visible */
+.edit-mode select {
+  appearance: none;
+  -webkit-appearance: none;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%2394a3b8'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 1rem center;
+  background-size: 1em;
+}
+
+.edit-mode input[type="date"]::-webkit-calendar-picker-indicator {
+  filter: invert(1);
+  opacity: 0.7;
+}

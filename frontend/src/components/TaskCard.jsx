@@ -1,15 +1,13 @@
 import { useState } from "react";
 import API from "../api/axios";
 import socket from "../api/socket";
-import {
-  FiEdit2, FiTrash2, FiUserPlus, FiCalendar, FiSave, FiX,
-} from "react-icons/fi";
+import { FiEdit2, FiTrash2, FiUserPlus, FiCalendar, FiSave, FiX } from "react-icons/fi";
 
 export default function TaskCard({ task, onTaskUpdate, onTaskDelete }) {
   const [editing, setEditing] = useState(false);
   const [editedTask, setEditedTask] = useState({
     title: task.title,
-    description: task.description,
+    description: task.description || "", // Ensure description exists
     priority: task.priority,
     dueDate: task.dueDate ? task.dueDate.slice(0, 10) : "",
   });
@@ -65,7 +63,6 @@ export default function TaskCard({ task, onTaskUpdate, onTaskDelete }) {
   };
 
   const handleDragStart = (e) => {
-    // Don't drag if clicking on interactive elements or in edit mode
     if (editing || e.target.closest('button, input, textarea, select, .task-actions')) {
       e.preventDefault();
       return;
@@ -79,7 +76,7 @@ export default function TaskCard({ task, onTaskUpdate, onTaskDelete }) {
     setEditing(false);
     setEditedTask({
       title: task.title,
-      description: task.description,
+      description: task.description || "",
       priority: task.priority,
       dueDate: task.dueDate ? task.dueDate.slice(0, 10) : "",
     });
@@ -88,26 +85,31 @@ export default function TaskCard({ task, onTaskUpdate, onTaskDelete }) {
   if (editing) {
     return (
       <div 
-        className={`task-card edit-mode task-card-${editedTask.priority.toLowerCase()}`} 
+        className={`task-card edit-mode task-card-${editedTask.priority.toLowerCase()}`}
         onClick={(e) => e.stopPropagation()}
       >
         <div className="input-group">
+          <label>Task Title</label>
           <input
             value={editedTask.title}
             onChange={(e) => setEditedTask({ ...editedTask, title: e.target.value })}
-            placeholder="Task title"
+            placeholder="Enter task title"
             autoFocus
           />
         </div>
+
         <div className="input-group">
+          <label>Description</label>
           <textarea
             value={editedTask.description}
             onChange={(e) => setEditedTask({ ...editedTask, description: e.target.value })}
-            placeholder="Description"
+            placeholder="Enter task description"
             rows="3"
           />
         </div>
+
         <div className="input-group">
+          <label>Priority</label>
           <select
             value={editedTask.priority}
             onChange={(e) => setEditedTask({ ...editedTask, priority: e.target.value })}
@@ -117,6 +119,7 @@ export default function TaskCard({ task, onTaskUpdate, onTaskDelete }) {
             <option value="High">High</option>
           </select>
         </div>
+
         <div className="input-group">
           <label>
             <FiCalendar style={{ marginRight: "8px" }} />
@@ -128,11 +131,18 @@ export default function TaskCard({ task, onTaskUpdate, onTaskDelete }) {
             onChange={(e) => setEditedTask({ ...editedTask, dueDate: e.target.value })}
           />
         </div>
+
         <div className="task-actions">
-          <button className="task-btn task-btn-save" onClick={handleUpdate}>
+          <button 
+            className="task-btn task-btn-save" 
+            onClick={handleUpdate}
+          >
             <FiSave /> Save
           </button>
-          <button className="task-btn task-btn-cancel" onClick={cancelEdit}>
+          <button 
+            className="task-btn task-btn-cancel" 
+            onClick={cancelEdit}
+          >
             <FiX /> Cancel
           </button>
         </div>

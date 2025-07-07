@@ -65,7 +65,12 @@ export default function TaskCard({ task, onTaskUpdate, onTaskDelete }) {
   };
 
   const handleDragStart = (e) => {
-    if (!editing) e.dataTransfer.setData("taskId", task._id);
+    // Don't drag if clicking on interactive elements or in edit mode
+    if (editing || e.target.closest('button, input, textarea, select, .task-actions')) {
+      e.preventDefault();
+      return;
+    }
+    e.dataTransfer.setData("taskId", task._id);
   };
 
   const cancelEdit = (e) => {
@@ -82,12 +87,16 @@ export default function TaskCard({ task, onTaskUpdate, onTaskDelete }) {
 
   if (editing) {
     return (
-      <div className={`task-card edit-mode task-card-${editedTask.priority.toLowerCase()}`} onClick={(e) => e.stopPropagation()}>
+      <div 
+        className={`task-card edit-mode task-card-${editedTask.priority.toLowerCase()}`} 
+        onClick={(e) => e.stopPropagation()}
+      >
         <div className="input-group">
           <input
             value={editedTask.title}
             onChange={(e) => setEditedTask({ ...editedTask, title: e.target.value })}
             placeholder="Task title"
+            autoFocus
           />
         </div>
         <div className="input-group">
@@ -132,17 +141,14 @@ export default function TaskCard({ task, onTaskUpdate, onTaskDelete }) {
           <div className="conflict-modal">
             <h4>Conflict Detected</h4>
             <p>This task was updated by someone else.</p>
-
             <div className="modal-section">
               <h5>Your Changes</h5>
               <pre>{JSON.stringify(editedTask, null, 2)}</pre>
             </div>
-
             <div className="modal-section">
               <h5>Server Version</h5>
               <pre>{JSON.stringify(conflictData, null, 2)}</pre>
             </div>
-
             <div className="modal-actions">
               <button onClick={() => {
                 setEditedTask(conflictData);
@@ -195,17 +201,29 @@ export default function TaskCard({ task, onTaskUpdate, onTaskDelete }) {
         </div>
 
         <div className="task-actions">
-          <button className="task-btn task-btn-smart" onClick={handleSmartAssign} title="Smart Assign">
+          <button 
+            className="task-btn task-btn-smart" 
+            onClick={handleSmartAssign} 
+            title="Smart Assign"
+          >
             <FiUserPlus />
           </button>
-          <button className="task-btn task-btn-edit" onClick={(e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            setEditing(true);
-          }} title="Edit Task">
+          <button 
+            className="task-btn task-btn-edit" 
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              setEditing(true);
+            }} 
+            title="Edit Task"
+          >
             <FiEdit2 />
           </button>
-          <button className="task-btn task-btn-delete" onClick={handleDelete} title="Delete Task">
+          <button 
+            className="task-btn task-btn-delete" 
+            onClick={handleDelete} 
+            title="Delete Task"
+          >
             <FiTrash2 />
           </button>
         </div>

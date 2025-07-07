@@ -2,12 +2,7 @@ import { useState } from "react";
 import API from "../api/axios";
 import socket from "../api/socket";
 import {
-  FiEdit2,
-  FiTrash2,
-  FiUserPlus,
-  FiCalendar,
-  FiSave,
-  FiX,
+  FiEdit2, FiTrash2, FiUserPlus, FiCalendar, FiSave, FiX,
 } from "react-icons/fi";
 
 export default function TaskCard({ task, onTaskUpdate, onTaskDelete }) {
@@ -37,7 +32,6 @@ export default function TaskCard({ task, onTaskUpdate, onTaskDelete }) {
   const handleUpdate = async (e) => {
     e.preventDefault();
     e.stopPropagation();
-
     try {
       const res = await API.put(`/tasks/${task._id}`, {
         ...editedTask,
@@ -134,7 +128,6 @@ export default function TaskCard({ task, onTaskUpdate, onTaskDelete }) {
           </button>
         </div>
 
-        {/* Conflict Modal */}
         {showConflictModal && (
           <div className="conflict-modal">
             <h4>Conflict Detected</h4>

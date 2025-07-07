@@ -579,9 +579,10 @@ button {
 }
 
 /* Ensure buttons don't interfere with drag operations */
-.task-card > *:not(.task-actions) {
+.task-card:not(.edit-mode) > *:not(.task-actions) {
   pointer-events: none;
 }
+
 
 .task-actions {
   pointer-events: auto;

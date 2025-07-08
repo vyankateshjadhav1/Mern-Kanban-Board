@@ -127,7 +127,8 @@ This prevents data loss and ensures collaborative editing is safe.
 ## 📸 Screenshots (optional)
 >![image](https://github.com/user-attachments/assets/22d920bc-a25b-475c-9294-6a70de08de1e)
 ![image](https://github.com/user-attachments/assets/3881426b-e68e-4c97-9e4a-5af0752b9a27)
-![image](https://github.com/user-attachments/assets/c9872078-0f3c-428e-8581-f185f7ba3d93)
+![image](https://github.com/user-attachments/assets/44272e49-707d-4077-b08b-d5aa215d198c)
+
 
 
 

@@ -3,6 +3,7 @@
 
 TaskFlow is a real-time collaborative Kanban board built with the MERN stack. It allows multiple users to manage tasks efficiently with features like smart task assignment, conflict resolution, drag-and-drop updates, and real-time synchronization using sockets.
 
+DEMO VIDEO : https://youtu.be/ZY9g3SNipdw
 ---
 
 ## 🚀 Project Overview
